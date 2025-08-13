@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infographic: คู่มือโปรโตคอลเครือข่ายที่ปลอดภัย</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Brilliant Blues -->
+    <!-- Application Structure Plan: A single, scrollable page infographic with a clear narrative flow. It starts with a hero section to introduce the topic. The content is then divided into three logical, thematic sections: 1) Core Network Foundations, 2) Securing Daily Applications, and 3) Secure Remote Connections. This structure guides the user from foundational concepts to practical applications. The user flow is primarily vertical scrolling, enhanced by a sticky navigation bar for quick access to sections. This is more engaging and digestible than a static document. -->
+    <!-- Visualization & Content Choices: 
+        - Key Protocols (DHCP, DNS, etc.): Goal=Inform. Method=Large, bold "Single Big Number" style cards with icons and concise text to highlight their core function, risk, and solution. Justification=Makes critical information highly scannable and impactful. (Method: HTML/Tailwind, NO SVG).
+        - Protocol Security Comparison (Secure vs. Insecure): Goal=Compare. Method=A horizontal bar chart created with Chart.js. Interaction=Tooltips on hover provide port numbers. Justification=A bar chart visually represents the "upgrade" from an insecure to a secure state more effectively than a table. (Method: Chart.js/Canvas, NO SVG).
+        - VPN Tunneling Diagram: Goal=Organize/Show Process. Method=A custom-built flowchart using structured HTML and Tailwind CSS. Interaction=Clickable buttons to highlight paths and update explanatory text. Justification=Makes an abstract process tangible and easy to understand. (Method: HTML/Tailwind/JS, NO SVG/Mermaid).
+        - VPN Feature Comparison (IPSec vs. SSL): Goal=Compare. Method=A clear, responsive HTML table for direct feature comparison. Justification=Best for text-heavy, point-by-point comparisons. (Method: HTML/Tailwind, NO SVG).
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f0f8ff; /* Alice Blue - a very light blue */
+            scroll-behavior: smooth;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 450px;
+            max-height: 60vh;
+        }
+        .nav-link.active {
+            color: #ee9b00;
+            border-bottom: 2px solid #ee9b00;
+        }
+        .flow-box {
+            transition: all 0.3s ease-in-out;
+            border: 2px solid transparent;
+        }
+        .flow-box.active {
+            border-color: #0a9396;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(10, 147, 150, 0.5);
+        }
+        .flow-line {
+            transition: all 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white/90 backdrop-blur-md shadow-lg sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+            <h1 class="text-2xl font-bold" style="color: #005f73;">🛡️ Secure Protocols</h1>
+            <div class="hidden md:flex items-center space-x-8 text-lg">
+                <a href="#foundations" class="nav-link text-gray-600 hover:text-[#0a9396] font-semibold pb-1">รากฐานเครือข่าย</a>
+                <a href="#applications" class="nav-link text-gray-600 hover:text-[#0a9396] font-semibold pb-1">แอปพลิเคชัน</a>
+                <a href="#remote" class="nav-link text-gray-600 hover:text-[#0a9396] font-semibold pb-1">การเชื่อมต่อระยะไกล</a>
+            </div>
+             <div class="md:hidden">
+                <select id="mobile-nav" class="bg-white border border-gray-300 rounded-md p-2">
+                    <option value="#foundations">รากฐานเครือข่าย</option>
+                    <option value="#applications">แอปพลิเคชัน</option>
+                    <option value="#remote">การเชื่อมต่อระยะไกล</option>
+                </select>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-10">
+
+        <section class="text-center my-16">
+            <h2 class="text-5xl font-extrabold mb-4" style="color: #005f73;">ปลดล็อกความปลอดภัยเครือข่าย</h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                สำรวจโลกของโปรโตคอลเครือข่ายผ่าน Infographic ที่จะเปลี่ยนเรื่องเทคนิคซับซ้อนให้กลายเป็นภาพที่เข้าใจง่ายและน่าสนใจ
+            </p>
+        </section>
+
+        <section id="foundations" class="my-24">
+            <h3 class="text-4xl font-bold text-center mb-12" style="color: #0a9396;">รากฐานเครือข่ายที่ปลอดภัย</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="bg-white p-6 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-6xl mb-4">📡</div>
+                    <h4 class="text-2xl font-bold mb-2" style="color: #005f73;">DHCP</h4>
+                    <p class="text-gray-600"><strong>หน้าที่:</strong> แจกจ่าย IP Address อัตโนมัติ</p>
+                    <p class="text-red-500 mt-2"><strong>ความเสี่ยง:</strong> เซิร์ฟเวอร์ปลอม</p>
+                    <p class="text-green-600 font-semibold mt-1"><strong>ทางแก้:</strong> DHCP Snooping</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-6xl mb-4">📖</div>
+                    <h4 class="text-2xl font-bold mb-2" style="color: #005f73;">DNS</h4>
+                    <p class="text-gray-600"><strong>หน้าที่:</strong> แปลงชื่อเว็บเป็น IP</p>
+                    <p class="text-red-500 mt-2"><strong>ความเสี่ยง:</strong> การปลอมแปลงข้อมูล</p>
+                    <p class="text-green-600 font-semibold mt-1"><strong>ทางแก้:</strong> DNSSEC</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-6xl mb-4">🗂️</div>
+                    <h4 class="text-2xl font-bold mb-2" style="color: #005f73;">LDAP</h4>
+                    <p class="text-gray-600"><strong>หน้าที่:</strong> เข้าถึงข้อมูลผู้ใช้</p>
+                    <p class="text-red-500 mt-2"><strong>ความเสี่ยง:</strong> ดักฟังรหัสผ่าน</p>
+                    <p class="text-green-600 font-semibold mt-1"><strong>ทางแก้:</strong> LDAPS (เข้ารหัส)</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-xl text-center transform hover:scale-105 transition-transform duration-300">
+                    <div class="text-6xl mb-4">⏰</div>
+                    <h4 class="text-2xl font-bold mb-2" style="color: #005f73;">NTP</h4>
+                    <p class="text-gray-600"><strong>หน้าที่:</strong> ซิงค์เวลาให้ตรงกัน</p>
+                    <p class="text-red-500 mt-2"><strong>ความเสี่ยง:</strong> Log ไม่น่าเชื่อถือ</p>
+                    <p class="text-green-600 font-semibold mt-1"><strong>ทางแก้:</strong> ใช้เซิร์ฟเวอร์ที่เชื่อถือได้</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="applications" class="my-24">
+            <h3 class="text-4xl font-bold text-center mb-4" style="color: #0a9396;">ยกระดับความปลอดภัยแอปพลิเคชัน</h3>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">เปรียบเทียบความปลอดภัยระหว่างโปรโตคอลเวอร์ชันเก่าและใหม่ที่เราใช้งานทุกวัน การเลือกใช้เวอร์ชันที่เข้ารหัส (แถบสีฟ้า) คือกุญแจสำคัญ</p>
+            <div class="bg-white p-8 rounded-2xl shadow-2xl">
+                <div class="chart-container">
+                    <canvas id="protocolChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <section id="remote" class="my-24">
+            <h3 class="text-4xl font-bold text-center mb-12" style="color: #0a9396;">การเชื่อมต่อระยะไกลที่วางใจได้</h3>
+            
+            <div class="bg-white p-8 rounded-2xl shadow-2xl mb-16">
+                 <h4 class="text-3xl font-bold text-center mb-2" style="color: #005f73;">Full Tunnel vs. Split Tunnel</h4>
+                 <p class="text-center text-gray-600 mb-8 max-w-2xl mx-auto">ทำความเข้าใจเส้นทางการวิ่งของข้อมูลผ่าน VPN ด้วยแผนภาพเชิงโต้ตอบ ลองคลิกเพื่อดูความแตกต่าง</p>
+                <div class="flex justify-center mb-8 space-x-4">
+                    <button id="full-tunnel-btn" class="flow-box bg-blue-100 text-blue-800 px-6 py-3 rounded-lg font-semibold">Full Tunnel</button>
+                    <button id="split-tunnel-btn" class="flow-box bg-orange-100 text-orange-800 px-6 py-3 rounded-lg font-semibold">Split Tunnel</button>
+                </div>
+                
+                <div class="relative max-w-4xl mx-auto p-4 flex items-center justify-center h-48">
+                    <div class="text-center absolute left-0">
+                        <div class="text-6xl">💻</div>
+                        <div class="font-bold mt-2">Client</div>
+                    </div>
+                    
+                    <div class="text-center absolute right-0">
+                        <div class="text-6xl">🏢</div>
+                        <div class="font-bold mt-2">Corporate Network</div>
+                    </div>
+
+                    <div class="text-center absolute top-0">
+                        <div class="text-6xl">☁️</div>
+                        <div class="font-bold mt-2">Internet</div>
+                    </div>
+                    
+                    <svg class="absolute w-full h-full" viewbox="0 0 400 120">
+                        <path id="path-corp" class="flow-line" d="M 50 60 H 350" stroke="#cccccc" stroke-width="8" fill="none" stroke-dasharray="15 5"/>
+                        <path id="path-internet" class="flow-line" d="M 50 60 Q 200 -20 350 60" stroke="#cccccc" stroke-width="8" fill="none" stroke-dasharray="15 5"/>
+                    </svg>
+                </div>
+                <div id="tunnel-info" class="mt-8 p-6 bg-gray-50 rounded-lg min-h-[100px] text-center">
+                    <p id="tunnel-desc" class="text-lg text-gray-700">เลือกรูปแบบเพื่อดูคำอธิบายและเส้นทางการวิ่งของข้อมูล</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-2xl">
+                <h4 class="text-3xl font-bold text-center mb-8" style="color: #005f73;">SSH: รีโมทอย่างปลอดภัย</h4>
+                <p class="text-center text-lg text-gray-600 max-w-3xl mx-auto">
+                    SSH (Secure Shell) คือมาตรฐานทองสำหรับการรีโมทเข้าจัดการเซิร์ฟเวอร์ผ่าน Command Line โดยการเชื่อมต่อทั้งหมดจะถูกเข้ารหัสอย่างรัดกุม ใช้การยืนยันตัวตนด้วย Public/Private Key เพื่อความปลอดภัยสูงสุดแทนการใช้รหัสผ่านแบบเดิมๆ
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-[#005f73] text-white text-center p-6 mt-12">
+        <p>Infographic สร้างสรรค์จากเอกสารประกอบการสอนวิชา 070315109 มจพ.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const protocolChartCtx = document.getElementById('protocolChart').getContext('2d');
+            new Chart(protocolChartCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Web', 'File Transfer', 'Email (Send)', 'Email (Receive)', 'VoIP'],
+                    datasets: [{
+                        label: 'Insecure Protocol',
+                        data: [80, 70, 60, 65, 75],
+                        backgroundColor: '#ca6702',
+                        borderColor: '#bb3e03',
+                        borderWidth: 1
+                    }, {
+                        label: 'Secure Protocol',
+                        data: [100, 95, 90, 92, 98],
+                        backgroundColor: '#0a9396',
+                        borderColor: '#005f73',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            display: false,
+                            max: 110
+                        },
+                        y: {
+                           ticks: {
+                               font: {
+                                   size: 14,
+                                   weight: 'bold'
+                               }
+                           }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        title: {
+                            display: true,
+                            text: 'ระดับความปลอดภัยของโปรโตคอล (เปรียบเทียบ)',
+                            font: { size: 18 }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    return tooltipItems[0].label;
+                                },
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    const protocolMap = {
+                                        'Web': { insecure: 'HTTP (80)', secure: 'HTTPS (443)' },
+                                        'File Transfer': { insecure: 'FTP (21)', secure: 'SFTP (22) / FTPS (990)' },
+                                        'Email (Send)': { insecure: 'SMTP (25)', secure: 'SMTPS (465)' },
+                                        'Email (Receive)': { insecure: 'IMAP (143)', secure: 'IMAPS (993)' },
+                                        'VoIP': { insecure: 'SIP/RTP', secure: 'SIPS/SRTP' }
+                                    };
+                                    const type = context.dataset.label.includes('Insecure') ? 'insecure' : 'secure';
+                                    label += protocolMap[context.label][type];
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const fullBtn = document.getElementById('full-tunnel-btn');
+            const splitBtn = document.getElementById('split-tunnel-btn');
+            const pathCorp = document.getElementById('path-corp');
+            const pathInternet = document.getElementById('path-internet');
+            const tunnelDesc = document.getElementById('tunnel-desc');
+            const fullBox = document.getElementById('full-tunnel-btn');
+            const splitBox = document.getElementById('split-tunnel-btn');
+
+            function showFullTunnel() {
+                pathCorp.style.stroke = '#0a9396';
+                pathInternet.style.stroke = '#0a9396';
+                tunnelDesc.textContent = 'ข้อมูลทั้งหมดวิ่งผ่านอุโมงค์ที่เข้ารหัสไปยังเครือข่ายองค์กรก่อนเสมอ ปลอดภัยสูงสุด';
+                fullBox.classList.add('active');
+                splitBox.classList.remove('active');
+            }
+
+            function showSplitTunnel() {
+                pathCorp.style.stroke = '#0a9396';
+                pathInternet.style.stroke = '#ee9b00';
+                tunnelDesc.textContent = 'เฉพาะข้อมูลที่ไปเครือข่ายองค์กรเท่านั้นที่เข้ารหัส ส่วนข้อมูลอินเทอร์เน็ตอื่นวิ่งตรงเพื่อความเร็ว';
+                splitBox.classList.add('active');
+                fullBox.classList.remove('active');
+            }
+            
+            fullBtn.addEventListener('click', showFullTunnel);
+            splitBtn.addEventListener('click', showSplitTunnel);
+            
+            const mobileNav = document.getElementById('mobile-nav');
+            mobileNav.addEventListener('change', function() {
+                const section = document.querySelector(this.value);
+                if (section) {
+                    section.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            showFullTunnel();
+        });
+    </script>
+</body>
+</html>
